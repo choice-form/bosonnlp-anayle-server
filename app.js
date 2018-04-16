@@ -1,10 +1,21 @@
 const Koa = require('koa')
 const bodyParser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const cors = require('koa2-cors')
 const config = require('./config')
 const router = require('./routes')
 
 const app = new Koa()
+
+// app.use(async (ctx, next) => {
+//   // ctx.set('Access-Control-Allow-Origin', '*')
+//   // ctx.set('Access-Control-Allow-Credentials','true')
+//   await next()
+// })
+app.use(cors({
+  // origin:'*',
+  // credentials:'true'
+}))
 
 app.use(logger())
 app.use(bodyParser({

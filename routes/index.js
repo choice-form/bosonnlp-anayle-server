@@ -7,10 +7,11 @@ router.get('/a',async (ctx)=>{
 })
 router.post('/tag', nlpController.tag)
 router.post('/ner', nlpController.ner)
-router.post('/extractKeywords', nlpController.extractKeywords)
-router.post('/sentiment', nlpController.sentiment)
+router.post('/keywords', nlpController.keywords)
+router.post('/sentiment/:id', nlpController.sentiment)
 router.post('/depparser', nlpController.depparser)
 router.post('/classify', nlpController.classify)
 router.post('/suggest', nlpController.suggest)
+router.post('/summary',nlpController.summary)
 
 module.exports = router
