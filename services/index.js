@@ -15,7 +15,19 @@ class BosonNLP {
       method: 'POST',
       body: JSON.stringify(body)
     })
-    const json = res.json()
+    const json = await res.json()
+    return json
+  }
+  async get(url) {
+    const res = await fetch(url, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'X-Token': this.apiToken
+      },
+      method: 'GET'
+    })
+    const json = await res.json()
     return json
   }
   /**
@@ -139,6 +151,65 @@ class BosonNLP {
     // opt.percentage = parseFloat(opt.percentage)
     const url = `${this.baseUrl}/summary/analysis`
     const res = await this.post(url, body)
+    return res
+  }
+  /**
+   * 文本聚类引擎
+   * 
+   * 上传数据
+   * 
+   * @param {object} param0 提交对象 {text,id}
+   * @param {object} option 参数 {taskId}
+   */
+  async clusterPush({ text, id }, option = { taskId }) {
+    const body = {
+      _id: id,
+      text
+    }
+    const url = `${this.baseUrl}/cluster/push/${option.taskId}`
+    const res = await this.post(url, body)
+    return res
+  }
+  /**
+   * 文本聚类引擎
+   * 
+   * 调用分析
+   * 
+   * @param {string} taskId 任务id
+   * @param {object} option 参数 {alpha,beta}
+   */
+  async cluster(taskId, option = { alpha: 0.8, beta: 0.45 }) {
+    const options = {
+      alpha: 0.8,
+      beta: 0.45
+    }
+    const opt = Object.assign(options, option)
+    const url = `${this.baseUrl}/cluster/analysis/${taskId}?alpha=${opt.alpha}&beta=${opt.beta}`
+    const res = await this.get(url)
+    return res
+  }
+  /**
+   * 文本聚类引擎
+   *
+   * 查看任务状态
+   * 
+   * @param {string} taskId 任务id
+   */
+  async clusterStatus(taskId) {
+    const url = `${this.baseUrl}/cluster/status/${taskId}`
+    const res = await this.get(url)
+    return res
+  }
+  /**
+   * 查看任务状态
+   * 
+   * 获取结果
+   * 
+   * @param {string} taskId 任务id
+   */
+  async clusterResult(taskId) {
+    const url = `${this.baseUrl}/cluster/result/${taskId}`
+    const res = await this.get(url)
     return res
   }
 }

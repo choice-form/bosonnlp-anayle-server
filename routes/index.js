@@ -14,4 +14,9 @@ router.post('/classify', nlpController.classify)
 router.post('/suggest', nlpController.suggest)
 router.post('/summary',nlpController.summary)
 
+router.post('/cluster/push/:pi',nlpController.clusterPush)
+router.get('/cluster/start/:id',nlpController.cluster)
+router.get('/cluster/status/:id',nlpController.clusterStatus)
+router.get('/cluster/result/:id',nlpController.clusterResult)
+
 module.exports = router

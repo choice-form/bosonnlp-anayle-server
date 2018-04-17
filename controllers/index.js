@@ -46,5 +46,27 @@ module.exports = {
     const { percentage } = ctx.query
     const data = await bosonNlp.summary(text, { percentage })
     ctx.body = { 'word': data }
+  },
+  async clusterPush(ctx) {
+    const { pi } = ctx.params
+    const { text, id } = ctx.request.body
+    const data = await bosonNlp.clusterPush({ text, id }, { 'taskId':pi })
+    ctx.body = data
+  },
+  async cluster(ctx) {
+    const { id } = ctx.params
+    const { alpha, beta } = ctx.query
+    const data = await bosonNlp.cluster(id, { alpha, beta })
+    ctx.body = data
+  },
+  async clusterStatus(ctx) {
+    const { id } = ctx.params
+    const data = await bosonNlp.clusterStatus(id)
+    ctx.body = data
+  },
+  async clusterResult(ctx) {
+    const { id } = ctx.params
+    const data = await bosonNlp.clusterResult(id)
+    ctx.body = data
   }
 }
