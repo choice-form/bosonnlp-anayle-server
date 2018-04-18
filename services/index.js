@@ -201,7 +201,7 @@ class BosonNLP {
     return res
   }
   /**
-   * 查看任务状态
+   * 文本聚类引擎
    * 
    * 获取结果
    * 
@@ -209,6 +209,65 @@ class BosonNLP {
    */
   async clusterResult(taskId) {
     const url = `${this.baseUrl}/cluster/result/${taskId}`
+    const res = await this.get(url)
+    return res
+  }
+  /**
+   * 典型意见引擎
+   * 
+   * 上传数据
+   * 
+   * @param {object} param0 提交对象 {text,id}
+   * @param {object} param1 参数 {taskId}
+   */
+  async commentsPush({ text, id }, { taskId }) {
+    const body = {
+      _id: id,
+      text
+    }
+    const url = `${this.baseUrl}/comments/push/${taskId}`
+    const res = await this.post(url, body)
+    return res
+  }
+  /**
+   * 典型意见引擎
+   * 
+   * 调用分析
+   * 
+   * @param {string} taskId 任务id
+   * @param {option} option 参数 {alpha,beta}
+   */
+  async comments(taskId, option = { alpha: 0.8, beta: 0.45 }) {
+    const options = {
+      alpha: 0.8,
+      beta: 0.45
+    }
+    const opt = Object.assign(options, option)
+    const url = `${this.baseUrl}/comments/analysis/${taskId}?alpha=${opt.alpha}&beta=${opt.beta}`
+    const res = await this.get(url)
+    return res
+  }
+  /**
+   * 典型意见引擎
+   * 
+   * 查看任务状态
+   * 
+   * @param {string} taskId 任务id
+   */
+  async commentsStatus(taskId) {
+    const url = `${this.baseUrl}/comments/status/${taskId}`
+    const res = await this.get(url)
+    return res
+  }
+  /**
+   * 典型意见引擎
+   * 
+   * 获取结果
+   * 
+   * @param {string} taskId 任务id
+   */
+  async commentsResult(taskId) {
+    const url = `${this.baseUrl}/comments/result/${taskId}`
     const res = await this.get(url)
     return res
   }

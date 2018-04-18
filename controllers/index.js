@@ -50,7 +50,7 @@ module.exports = {
   async clusterPush(ctx) {
     const { pi } = ctx.params
     const { text, id } = ctx.request.body
-    const data = await bosonNlp.clusterPush({ text, id }, { 'taskId':pi })
+    const data = await bosonNlp.clusterPush({ text, id }, { 'taskId': pi })
     ctx.body = data
   },
   async cluster(ctx) {
@@ -67,6 +67,28 @@ module.exports = {
   async clusterResult(ctx) {
     const { id } = ctx.params
     const data = await bosonNlp.clusterResult(id)
+    ctx.body = data
+  },
+  async commentsPush(ctx) {
+    const { pi } = ctx.params
+    const { text, id } = ctx.request.body
+    const data = await bosonNlp.commentsPush({ text, id }, { taskId: pi })
+    ctx.body = data
+  },
+  async comments(ctx) {
+    const { id } = ctx.params
+    const { alpha, beta } = ctx.query
+    const data = await bosonNlp.comments(id, { alpha, beta })
+    ctx.body = data
+  },
+  async commentsStatus(ctx) {
+    const { id } = ctx.params
+    const data = await bosonNlp.commentsStatus(id)
+    ctx.body = data
+  },
+  async commentsResult(ctx) {
+    const { id } = ctx.params
+    const data = await bosonNlp.commentsResult(id)
     ctx.body = data
   }
 }
