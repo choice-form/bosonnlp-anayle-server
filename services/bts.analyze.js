@@ -68,41 +68,63 @@ module.exports = {
   },
 
   async saveToOutput(list) {
-    return db.outputs.bulkCreate(list)
-  },
-
-  async analyze(list) {
-    const result = []
-    const reg = /^(n|v|a|b|z)/g
-    for (const l of list) {
-      const { tag, word } = l.participle[0];
-      const resTag = [];
-      const resWord = [];
-      for (let i = 0; i < tag.length; i++) {
-        if (reg.test(tag[i]) && word[i] !== '' && word[i].length > 1) {
-          resTag.push(tag[i]);
-          resWord.push(word[i]);
+    // return db.outputs.upsert(list)
+    const arr = []
+    for (const row of list) {
+      const obj = await db.outputs.findOne({
+        where: {
+          formal_id: row.formal_id
         }
-      }
+      })
 
-      const arr = [{
-        tag: resTag,
-        word: resWord,
-      }];
-
-      const where = {
-        formal_id: l.formal_id,
-      };
-      const obj = await this.outputRepository.findOne({ where: { ...where } });
       if (obj) {
-        obj.filter = arr;
-        this.outputRepository.save(obj);
+        obj.filter = row.filter;
+        const res = await obj.save()
+        arr.push({
+          id: res.id
+        })
       } else {
-        this.outputRepository.insert({
-          ...l,
-          filter: arr,
-        });
+        const res = await db.outputs.create(row)
+        arr.push({
+          id: res.id
+        })
       }
     }
-  }
+    return arr;
+  },
+
+  // async analyze(list) {
+  //   const result = []
+  //   const reg = /^(n|v|a|b|z)/g
+  //   for (const l of list) {
+  //     const { tag, word } = l.participle[0];
+  //     const resTag = [];
+  //     const resWord = [];
+  //     for (let i = 0; i < tag.length; i++) {
+  //       if (reg.test(tag[i]) && word[i] !== '' && word[i].length > 1) {
+  //         resTag.push(tag[i]);
+  //         resWord.push(word[i]);
+  //       }
+  //     }
+
+  //     const arr = [{
+  //       tag: resTag,
+  //       word: resWord,
+  //     }];
+
+  //     const where = {
+  //       formal_id: l.formal_id,
+  //     };
+  //     const obj = await this.outputRepository.findOne({ where: { ...where } });
+  //     if (obj) {
+  //       obj.filter = arr;
+  //       this.outputRepository.save(obj);
+  //     } else {
+  //       this.outputRepository.insert({
+  //         ...l,
+  //         filter: arr,
+  //       });
+  //     }
+  //   }
+  // }
 }

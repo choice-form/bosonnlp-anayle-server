@@ -1,5 +1,7 @@
 const env = process.env.NODE_ENV || 'development'
 
+console.log(env);
+
 const config = {
   // 生产模式
   production: {
