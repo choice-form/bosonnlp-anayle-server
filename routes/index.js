@@ -1,5 +1,6 @@
 const Router = require('koa-router')
 const nlpController = require('../controllers/index')
+const btsController = require('../controllers/bts.controller')
 const router = new Router()
 
 router.get('/a', async (ctx) => {
@@ -22,5 +23,9 @@ router.post('/comments/push/:pi', nlpController.commentsPush)
 router.get('/comments/start/:id', nlpController.comments)
 router.get('/comments/status/:id', nlpController.commentsStatus)
 router.get('/comments/result/:id', nlpController.commentsResult)
+
+router.get('/find',btsController.findOne)
+router.get('/getcontext',btsController.getContext)
+router.get('/analyze',btsController.analyze)
 
 module.exports = router
